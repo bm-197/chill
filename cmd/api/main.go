@@ -9,7 +9,7 @@ import (
 	"github.com/bm-197/chill/internal/auth"
 	"github.com/bm-197/chill/internal/db"
 	"github.com/bm-197/chill/internal/env"
-	// "github.com/bm-197/chill/internal/mailer"
+	"github.com/bm-197/chill/internal/mailer"
 	"github.com/bm-197/chill/internal/ratelimiter"
 	"github.com/bm-197/chill/internal/store"
 	"github.com/bm-197/chill/internal/store/cache"
@@ -114,12 +114,12 @@ func main() {
 		cfg.rateLimiter.TimeFrame,
 	)
 
-	// Mailer
-	// mailer := mailer.NewSendgrid(cfg.mail.sendGrid.apiKey, cfg.mail.fromEmail)
-	// mailtrap, err := mailer.NewMailTrapClient(cfg.mail.mailTrap.apiKey, cfg.mail.fromEmail)
-	// if err != nil {
-	// 	logger.Fatal(err)
-	// }
+	//Mailer
+	//mailer := mailer.NewSendgrid(cfg.mail.sendGrid.apiKey, cfg.mail.fromEmail)
+	mailtrap, err := mailer.NewMailTrapClient(cfg.mail.mailTrap.apiKey, cfg.mail.fromEmail)
+	if err != nil {
+		logger.Fatal(err)
+	}
 
 	// Authenticator
 	jwtAuthenticator := auth.NewJWTAuthenticator(
@@ -136,7 +136,7 @@ func main() {
 		store:         store,
 		cacheStorage:  cacheStorage,
 		logger:        logger,
-		// mailer:        mailtrap,
+		mailer:        mailtrap,
 		authenticator: jwtAuthenticator,
 		rateLimiter:   rateLimiter,
 	}
