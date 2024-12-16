@@ -9,7 +9,7 @@ import (
 	"github.com/bm-197/chill/internal/auth"
 	"github.com/bm-197/chill/internal/db"
 	"github.com/bm-197/chill/internal/env"
-	"github.com/bm-197/chill/internal/mailer"
+	// "github.com/bm-197/chill/internal/mailer"
 	"github.com/bm-197/chill/internal/ratelimiter"
 	"github.com/bm-197/chill/internal/store"
 	"github.com/bm-197/chill/internal/store/cache"
@@ -18,8 +18,8 @@ import (
 
 const version = "1.1.0"
 
-//	@title			GopherSocial API
-//	@description	API for GopherSocial, a social network for gohpers
+//	@title			chill API
+//	@description	API for chill, a social network for weirdos
 //	@termsOfService	http://swagger.io/terms/
 
 //	@contact.name	API Support
@@ -41,7 +41,7 @@ func main() {
 		apiURL:      env.GetString("EXTERNAL_URL", "localhost:8080"),
 		frontendURL: env.GetString("FRONTEND_URL", "http://localhost:5173"),
 		db: dbConfig{
-			addr:         env.GetString("DB_ADDR", "postgres://admin:adminpassword@localhost/socialnetwork?sslmode=disable"),
+			addr:         env.GetString("DB_ADDR", "postgres://admin:adminpassword@localhost/chill?sslmode=disable"),
 			maxOpenConns: env.GetInt("DB_MAX_OPEN_CONNS", 30),
 			maxIdleConns: env.GetInt("DB_MAX_IDLE_CONNS", 30),
 			maxIdleTime:  env.GetString("DB_MAX_IDLE_TIME", "15m"),
@@ -71,7 +71,7 @@ func main() {
 			token: tokenConfig{
 				secret: env.GetString("AUTH_TOKEN_SECRET", "example"),
 				exp:    time.Hour * 24 * 3, // 3 days
-				iss:    "gophersocial",
+				iss:    "chill",
 			},
 		},
 		rateLimiter: ratelimiter.Config{
@@ -116,10 +116,10 @@ func main() {
 
 	// Mailer
 	// mailer := mailer.NewSendgrid(cfg.mail.sendGrid.apiKey, cfg.mail.fromEmail)
-	mailtrap, err := mailer.NewMailTrapClient(cfg.mail.mailTrap.apiKey, cfg.mail.fromEmail)
-	if err != nil {
-		logger.Fatal(err)
-	}
+	// mailtrap, err := mailer.NewMailTrapClient(cfg.mail.mailTrap.apiKey, cfg.mail.fromEmail)
+	// if err != nil {
+	// 	logger.Fatal(err)
+	// }
 
 	// Authenticator
 	jwtAuthenticator := auth.NewJWTAuthenticator(
@@ -136,7 +136,7 @@ func main() {
 		store:         store,
 		cacheStorage:  cacheStorage,
 		logger:        logger,
-		mailer:        mailtrap,
+		// mailer:        mailtrap,
 		authenticator: jwtAuthenticator,
 		rateLimiter:   rateLimiter,
 	}
